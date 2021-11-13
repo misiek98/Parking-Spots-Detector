@@ -1,7 +1,7 @@
 import os
 import cv2
 import shutil
-from tools.data_processing import Point, data_processing_methods
+from data_processing import Point, data_processing_methods
 
 
 listOfFolders = [os.path.join(os.getcwd(), 'haar_model', 'data'),

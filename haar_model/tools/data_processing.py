@@ -69,7 +69,7 @@ class data_processing_methods(Point):
                                    listOfPoints[iteration].y)
 
                 negativeImagesDir = os.path.join(
-                    os.getcwd(), 'detect_parking_lines', 'neg')
+                    os.getcwd(), 'haar_model', 'neg')
 
                 cv2.imwrite(os.path.join(
                     negativeImagesDir, f'file{len(os.listdir(negativeImagesDir))}.jpg'), img=img[topLeftY:bottomRightY, topLeftX:bottomRightX])
