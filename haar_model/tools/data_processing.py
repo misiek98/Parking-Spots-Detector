@@ -10,7 +10,7 @@ class Point:
     y: y coordinate
     '''
 
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int):
         self.x = x
         self.y = y
 
@@ -29,9 +29,12 @@ class data_processing_methods(Point):
         This method prepares data from listOfPoints to generate a .vec file that will be used to train a Haar Cascade model.
 
         listOfPoints: list that contains Point objects
-        '''
 
-        for iteration in range(len(listOfPoints)):
+
+        The list should consists of an even number of points (if not, there is an error). The iteration starts from the second element of the list. 
+        To create an area, you need 2 points - an initial point with the smallest x and y coordinates (top left corner), and the width and height of that area. The width and height of the area are calculated and stored in a list at the iterated position. Finally, we go 2 steps further in the loop and repeat the operation.
+        '''
+        for iteration, _ in enumerate(listOfPoints):
             if iteration % 2 == 1:
                 width = abs(listOfPoints[iteration].x -
                             listOfPoints[iteration - 1].x)
@@ -48,7 +51,7 @@ class data_processing_methods(Point):
                 listOfPoints[iteration] = Point(width, height)
 
     @staticmethod
-    def save_marked_area(listOfPoints, img):
+    def save_marked_area(listOfPoints: list, img: str):
         '''
         This method cuts out the marked part(s) of the image and save it to neg folder.
 
@@ -56,7 +59,7 @@ class data_processing_methods(Point):
         img: copy of the image
         '''
 
-        for iteration in range(len(listOfPoints)):
+        for iteration, _ in enumerate(listOfPoints):
             if iteration % 2 == 1:
                 topLeftX = min(listOfPoints[iteration - 1].x,
                                listOfPoints[iteration].x)
@@ -75,7 +78,7 @@ class data_processing_methods(Point):
                     negativeImagesDir, f'file{len(os.listdir(negativeImagesDir))}.jpg'), img=img[topLeftY:bottomRightY, topLeftX:bottomRightX])
 
     @staticmethod
-    def draw_rectangles(listOfPoints, img):
+    def draw_rectangles(listOfPoints: list, img: str):
         '''
         This method draws rectangles around marked objects.
 
@@ -83,7 +86,7 @@ class data_processing_methods(Point):
         img: copy of the image that you want to draw rectangles
         '''
 
-        for iteration in range(len(listOfPoints)):
+        for iteration, _ in enumerate(listOfPoints):
             if iteration % 2 == 1:
                 firstPoint = (
                     listOfPoints[iteration - 1].x, listOfPoints[iteration - 1].y)
