@@ -38,15 +38,13 @@ for image in os.listdir(imageSet):
 
         # by pressing 'n' program process data from listOfPoints, save it to parking_lines.info file and copy image from data to pos folder
         if cv2.waitKey(1) == ord('n'):
-            if len(listOfPoints) % 2 == 0:
-                print('Correct number of points, creating file...')
+            try:
+                assert len(listOfPoints) % 2 == 0
 
                 data_processing_methods.prepare_vector_data(
                     listOfPoints=listOfPoints)
-
                 pathToInfoFile = os.path.join(
                     os.getcwd(), 'haar_model', 'parking_lines.info')
-
                 posImagePath = os.path.join(
                     os.getcwd(), 'haar_model', 'pos', image)
 
@@ -64,27 +62,40 @@ for image in os.listdir(imageSet):
                 # copies image from data folder to pos folder
                 shutil.copyfile(src=imagePath, dst=os.path.join(
                     os.getcwd(), 'haar_model', 'pos', image))
-
                 break
 
-            else:
-                print('Incorrect number of points, points weren\'t saved')
+            except AssertionError:
+                print('Insufficient number of points, data wasn\'t saved')
                 listOfPoints.clear()
                 break
 
         # by pressing 'c' program cuts out the marked part(s) of the image and saves it to the neg folder.
         if cv2.waitKey(1) == ord('c'):
-            img = cv2.imread(imagePath)
-            data_processing_methods.save_marked_area(
-                listOfPoints=listOfPoints, img=img)
-            listOfPoints.clear()
-            break
+            try:
+                assert len(listOfPoints) % 2 == 0
+
+                img = cv2.imread(imagePath)
+                data_processing_methods.save_marked_area(
+                    listOfPoints=listOfPoints, img=img)
+                listOfPoints.clear()
+                break
+
+            except AssertionError:
+                print('Insufficient number of points, images wasn\'t saved')
+                listOfPoints.clear()
+                break
 
         # by pressing 'd' program displays image with drawn rectangles around marked objects
         if cv2.waitKey(1) == ord('d'):
-            imageWithRectangles = cv2.imread(imagePath)
-            cv2.imshow('Marked objects',
-                       data_processing_methods.draw_rectangles(listOfPoints=listOfPoints, img=imageWithRectangles))
+            try:
+                assert len(listOfPoints) % 2 == 0
+
+                imageWithRectangles = cv2.imread(imagePath)
+                cv2.imshow('Marked objects', data_processing_methods.draw_rectangles(
+                    listOfPoints=listOfPoints, img=imageWithRectangles))
+
+            except AssertionError:
+                print('Insufficient number of points, rectangles cannot be drawn.')
 
         # by pressing 'r' program removes last point from listOfPoints and from image
         if cv2.waitKey(1) == ord('r'):
