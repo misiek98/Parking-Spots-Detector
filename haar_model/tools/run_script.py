@@ -23,7 +23,7 @@ def get_position(event, x, y, flags, param):
 
 
 imageSet = os.path.join(
-    os.getcwd(), 'haar_model', 'data')
+    os.getcwd(), 'MGR', 'haar_model', 'data')
 
 
 for image in os.listdir(imageSet):
