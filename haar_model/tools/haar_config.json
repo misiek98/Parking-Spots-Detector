@@ -1,0 +1,6 @@
+{
+    "data": "C:\\Users\\Misiek\\Desktop\\kekkek\\Parking-Spots-Detector\\haar_model\\data",
+    "negDir": "C:\\Users\\Misiek\\Desktop\\kekkek\\Parking-Spots-Detector\\haar_model\\neg",
+    "posDir": "C:\\Users\\Misiek\\Desktop\\kekkek\\Parking-Spots-Detector\\haar_model\\pos",
+    "parkingLinesInfoFile": "C:\\Users\\Misiek\\Desktop\\kekkek\\Parking-Spots-Detector\\haar_model\\parking_lines.info"
+}
