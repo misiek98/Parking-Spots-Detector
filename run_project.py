@@ -5,7 +5,7 @@ from haar_model.tools.data_processing import data_processing_methods, Point, get
 from haar_model.tools.other_functions import load_config
 
 config = load_config(
-    r'C:\Users\Misiek\Desktop\kekkek\Parking-Spots-Detector\projekt.json'
+    r'C:\Users\Misiek\Desktop\Python\MGR\project_config.json'
 )
 
 with open(config['yoloNames']) as f:
@@ -34,8 +34,8 @@ frameNumber = 1
 while True:
     ret, frame = video.read()
     if ret == False:
-        print('Thx')
-        break
+        cv2.waitKey(0)
+        # break
 
     img = frame.copy()
 

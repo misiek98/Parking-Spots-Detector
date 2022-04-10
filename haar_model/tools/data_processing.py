@@ -5,7 +5,7 @@ import cv2
 from .other_functions import load_config
 
 config = load_config(
-    r'C:\Users\Misiek\Desktop\kekkek\Parking-Spots-Detector\haar_model\tools\haar.json')
+    r'C:\Users\Misiek\Desktop\Python\MGR\haar_model\tools\haar_config.json')
 
 
 class Point:
@@ -82,7 +82,8 @@ class data_processing_methods(Point):
                         negativeImagesDir,
                         f'file{len(os.listdir(negativeImagesDir))}.jpg'),
                     img=img[topLeftY:bottomRightY,
-                            topLeftX:bottomRightX])
+                            topLeftX:bottomRightX]
+                )
 
     @staticmethod
     def draw_rectangles(listOfPoints: list, img: str):
@@ -140,7 +141,8 @@ class data_processing_methods(Point):
                 center=(point.x, point.y),
                 radius=2,
                 color=(255, 255, 255),
-                thickness=-1)
+                thickness=-1
+            )
 
         return img, listOfPoints
 
@@ -155,12 +157,12 @@ def get_position(event, x, y, flags, param):
     flags and params were required to this function but weren't used.
     """
     if event == cv2.EVENT_LBUTTONDBLCLK:
-        print(x, y)
         cv2.circle(
             img=param[0],
             center=(x, y),
             radius=2,
             color=(255, 255, 255),
-            thickness=-1)
+            thickness=-1
+        )
 
         param[1].append(Point(x=x, y=y))

@@ -3,11 +3,11 @@ import os
 import cv2
 import shutil
 
-from data_processing import data_processing_methods, get_position
-from other_functions import load_config
+from tools.data_processing import data_processing_methods, get_position
+from tools.other_functions import load_config
 
 config = load_config(
-    r'C:\Users\Misiek\Desktop\kekkek\Parking-Spots-Detector\haar_model\tools\haar.json')
+    r'C:\Users\Misiek\Desktop\Python\MGR\haar_model\tools\haar_config.json')
 
 listOfPoints = []
 imageSet = config['data']
