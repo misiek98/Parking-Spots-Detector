@@ -20,8 +20,14 @@ class Point:
         self.x = x
         self.y = y
 
+    def __sub__(self, other):
+        return Point(
+            abs(self.x - other.x),
+            abs(self.y - other.y)
+        )
 
-class data_processing_methods(Point):
+
+class DataProcessingMethods(Point):
     """
     The methods below allow you to prepare data for a Haar-Cascade algorithm. 
     """
@@ -32,28 +38,31 @@ class data_processing_methods(Point):
     @staticmethod
     def prepare_vector_data(listOfPoints: list):
         """
-        This method prepares data from listOfPoints to generate a .vec file that will be used to train a Haar Cascade model.
+        This method prepares data from listOfPoints to generate a .vec file that will  
+        be used to train a Haar Cascade model.
 
         listOfPoints: list that contains Point objects
 
 
-        The list should consists of an even number of points (if not, there is an error). The iteration starts from the second element of the list. 
-        To create an area, you need 2 points - an initial point with the smallest x and y coordinates (top left corner), and the width and height of that area. The width and height of the area are calculated and stored in a list at the iterated position. Finally, we go 2 steps further in the loop and repeat the operation.
+        The list should consists of an even number of points (if not,  there is an error).  
+        The iteration starts from the second element of the list. 
+        To create an area, you need 2 points - an initial point with the smallest x and y coordinates  
+        (top left corner), and the width and height of that area. The width and height of the area are  
+        calculated and stored in a list at the iterated position. Finally, we go 2 steps further in  
+        the loop and repeat the operation.
         """
 
         for iteration, _ in enumerate(listOfPoints):
             if (iteration % 2 == 1):
-                width = abs(listOfPoints[iteration].x
-                            - listOfPoints[iteration - 1].x)
-                height = abs(listOfPoints[iteration].y
-                             - listOfPoints[iteration - 1].y)
+                width_and_height = (listOfPoints[iteration]
+                                    - listOfPoints[iteration - 1])
 
                 if (listOfPoints[iteration - 1].x > listOfPoints[iteration].x):
                     listOfPoints[iteration - 1].x = listOfPoints[iteration].x
                 if (listOfPoints[iteration - 1].y > listOfPoints[iteration].y):
                     listOfPoints[iteration - 1].y = listOfPoints[iteration].y
 
-                listOfPoints[iteration] = Point(width, height)
+                listOfPoints[iteration] = width_and_height
 
     @staticmethod
     def save_marked_area(listOfPoints: list, img: str):
@@ -96,21 +105,12 @@ class data_processing_methods(Point):
 
         for iteration, _ in enumerate(listOfPoints):
             if (iteration % 2 == 1):
-                firstPoint = (
-                    listOfPoints[iteration - 1].x,
-                    listOfPoints[iteration - 1].y
-                )
-                secondPoint = (
-                    listOfPoints[iteration].x,
-                    listOfPoints[iteration].y
-                )
-
                 cv2.putText(
                     img=img,
                     text=str(int((iteration - 1)/2)),
                     org=(
-                        (firstPoint[0] - 15),
-                        (firstPoint[1]) - 5),
+                        listOfPoints[iteration - 1].x - 15,
+                        listOfPoints[iteration - 1].y - 5),
                     fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                     fontScale=.5,
                     color=(0, 100, 255),
@@ -119,8 +119,12 @@ class data_processing_methods(Point):
 
                 image = cv2.rectangle(
                     img=img,
-                    pt1=firstPoint,
-                    pt2=secondPoint,
+                    pt1=(
+                        listOfPoints[iteration - 1].x,
+                        listOfPoints[iteration - 1].y),
+                    pt2=(
+                        listOfPoints[iteration].x,
+                        listOfPoints[iteration].y),
                     color=(0, 50, 255),
                     thickness=1
                 )
@@ -149,7 +153,10 @@ class data_processing_methods(Point):
 
 def get_position(event, x, y, flags, param):
     """
-    Function get_position does a few things. When you double click left mouse button function will draw a small circle at this point and add their coordinates (saved in class Point) to the listOfPoints list.
+    Function get_position does a few things. When you double click left  
+    mouse button function will  
+    draw a small circle at this point and add their coordinates  
+    (saved in class Point) to the listOfPoints list.
 
     event: induced action
     x: x coordinate

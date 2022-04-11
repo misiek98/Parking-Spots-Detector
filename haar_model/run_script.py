@@ -3,7 +3,7 @@ import os
 import cv2
 import shutil
 
-from tools.data_processing import data_processing_methods, get_position
+from tools.data_processing import DataProcessingMethods, get_position
 from tools.other_functions import load_config
 
 config = load_config(
@@ -29,7 +29,10 @@ for image in os.listdir(imageSet):
             param=[img, listOfPoints]
         )
 
-        cv2.imshow('Parking space', img.copy())
+        cv2.imshow(
+            winname='Parking space',
+            mat=img.copy()
+        )
 
         # by pressing 'n' program process data from listOfPoints,
         # save it to parking_lines.info file and copy image from data dir to pos folder
@@ -37,7 +40,7 @@ for image in os.listdir(imageSet):
             try:
                 assert len(listOfPoints) % 2 == 0
 
-                data_processing_methods.prepare_vector_data(
+                DataProcessingMethods.prepare_vector_data(
                     listOfPoints=listOfPoints
                 )
 
@@ -70,7 +73,7 @@ for image in os.listdir(imageSet):
                 assert len(listOfPoints) % 2 == 0
 
                 img = cv2.imread(imagePath)
-                data_processing_methods.save_marked_area(
+                DataProcessingMethods.save_marked_area(
                     listOfPoints=listOfPoints,
                     img=img
                 )
@@ -89,8 +92,8 @@ for image in os.listdir(imageSet):
 
                 imageWithRectangles = cv2.imread(imagePath)
                 cv2.imshow(
-                    'Marked objects',
-                    data_processing_methods.draw_rectangles(
+                    winname='Marked objects',
+                    mat=DataProcessingMethods.draw_rectangles(
                         listOfPoints=listOfPoints,
                         img=imageWithRectangles
                     )
@@ -102,7 +105,7 @@ for image in os.listdir(imageSet):
         # by pressing 'r' program removes last point from listOfPoints and from image
         if cv2.waitKey(1) == ord('r'):
             img = cv2.imread(imagePath)
-            img, listOfPoints = data_processing_methods.remove_point(
+            img, listOfPoints = DataProcessingMethods.remove_point(
                 img=img,
                 listOfPoints=listOfPoints
             )

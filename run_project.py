@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from haar_model.tools.data_processing import data_processing_methods, Point, get_position
+from haar_model.tools.data_processing import DataProcessingMethods, Point, get_position
 from haar_model.tools.other_functions import load_config
 
 config = load_config(
@@ -61,7 +61,7 @@ while True:
             listOfPoints.append(Point(x, y))
             listOfPoints.append(Point(x+w, y+h))
 
-        data_processing_methods.draw_rectangles(
+        DataProcessingMethods.draw_rectangles(
             listOfPoints=listOfPoints,
             img=img
         )
@@ -89,7 +89,7 @@ while True:
                     listOfPoints.pop(2*idx + 1)
                     listOfPoints.pop(2*idx)
 
-                data_processing_methods.draw_rectangles(
+                DataProcessingMethods.draw_rectangles(
                     listOfPoints=listOfPoints,
                     img=img
                 )
@@ -100,18 +100,18 @@ while True:
             if (cv2.waitKey(1) == ord('r')):
                 img = frame.copy()
 
-                img, listOfPoints = data_processing_methods.remove_point(
+                img, listOfPoints = DataProcessingMethods.remove_point(
                     img=img,
                     listOfPoints=listOfPoints
                 )
 
-                if len(listOfPoints) % 2 != 0:
-                    data_processing_methods.draw_rectangles(
+                if (len(listOfPoints) % 2 != 0):
+                    DataProcessingMethods.draw_rectangles(
                         listOfPoints=listOfPoints[:-1],
                         img=img
                     )
                 else:
-                    data_processing_methods.draw_rectangles(
+                    DataProcessingMethods.draw_rectangles(
                         listOfPoints=listOfPoints,
                         img=img
                     )
@@ -120,7 +120,7 @@ while True:
             if (cv2.waitKey(1) == ord('d')):
                 img = frame.copy()
 
-                data_processing_methods.draw_rectangles(
+                DataProcessingMethods.draw_rectangles(
                     listOfPoints=listOfPoints,
                     img=img
                 )
@@ -145,7 +145,7 @@ while True:
                     tempListThatCOntainsPoints.append(listOfPoints[2*idx + 1])
 
                 for i, _ in enumerate(tempListThatCOntainsPoints):
-                    if i % 2 == 1:
+                    if (i % 2 == 1):
                         listOfParkingAreas.append(
                             [max(tempListThatCOntainsPoints[i - 1].x, tempListThatCOntainsPoints[i].x),
                              min(tempListThatCOntainsPoints[i - 1].y, tempListThatCOntainsPoints[i].y)])
