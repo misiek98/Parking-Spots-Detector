@@ -1,3 +1,4 @@
+from email.mime import image
 import os
 
 import cv2
@@ -32,11 +33,11 @@ class DataProcessingMethods(Point):
     The methods below allow you to prepare data for a Haar-Cascade algorithm. 
     """
 
-    def __init__(self, x, y):
+    def __init__(self, x: int, y: int):
         super().__init__(x, y)
 
     @staticmethod
-    def prepare_vector_data(listOfPoints: list):
+    def prepare_vector_data(list_of_points: list) -> None:
         """
         This method prepares data from listOfPoints to generate a .vec file that will  
         be used to train a Haar Cascade model.
@@ -51,66 +52,65 @@ class DataProcessingMethods(Point):
         calculated and stored in a list at the iterated position. Finally, we go 2 steps further in  
         the loop and repeat the operation.
         """
-
-        for iteration, _ in enumerate(listOfPoints):
+        for iteration, _ in enumerate(list_of_points):
             if (iteration % 2 == 1):
-                width_and_height = (listOfPoints[iteration]
-                                    - listOfPoints[iteration - 1])
+                width_and_height = (list_of_points[iteration]
+                                    - list_of_points[iteration - 1])
 
-                if (listOfPoints[iteration - 1].x > listOfPoints[iteration].x):
-                    listOfPoints[iteration - 1].x = listOfPoints[iteration].x
-                if (listOfPoints[iteration - 1].y > listOfPoints[iteration].y):
-                    listOfPoints[iteration - 1].y = listOfPoints[iteration].y
+                if (list_of_points[iteration - 1].x > list_of_points[iteration].x):
+                    list_of_points[iteration -
+                                   1].x = list_of_points[iteration].x
+                if (list_of_points[iteration - 1].y > list_of_points[iteration].y):
+                    list_of_points[iteration -
+                                   1].y = list_of_points[iteration].y
 
-                listOfPoints[iteration] = width_and_height
+                list_of_points[iteration] = width_and_height
 
     @staticmethod
-    def save_marked_area(listOfPoints: list, img: str):
+    def save_marked_area(list_of_points: list, img: str) -> None:
         """
         This method cuts out the marked part(s) of the image and save it to neg folder.
 
         listOfPoints: list that contains Point objects
         img: copy of the image
         """
-
-        for iteration, _ in enumerate(listOfPoints):
+        for iteration, _ in enumerate(list_of_points):
             if (iteration % 2 == 1):
-                topLeftX = min(listOfPoints[iteration - 1].x,
-                               listOfPoints[iteration].x)
-                topLeftY = min(listOfPoints[iteration - 1].y,
-                               listOfPoints[iteration].y)
-                bottomRightX = max(listOfPoints[iteration - 1].x,
-                                   listOfPoints[iteration].x)
-                bottomRightY = max(listOfPoints[iteration - 1].y,
-                                   listOfPoints[iteration].y)
+                top_left_x = min(list_of_points[iteration - 1].x,
+                                 list_of_points[iteration].x)
+                top_left_y = min(list_of_points[iteration - 1].y,
+                                 list_of_points[iteration].y)
+                bottom_right_x = max(list_of_points[iteration - 1].x,
+                                     list_of_points[iteration].x)
+                bottom_right_y = max(list_of_points[iteration - 1].y,
+                                     list_of_points[iteration].y)
 
-                negativeImagesDir = config['negDir']
+                negative_images_dir = config['negDir']
 
                 cv2.imwrite(
                     filename=os.path.join(
-                        negativeImagesDir,
-                        f'file{len(os.listdir(negativeImagesDir))}.jpg'),
-                    img=img[topLeftY:bottomRightY,
-                            topLeftX:bottomRightX]
+                        negative_images_dir,
+                        f'file{len(os.listdir(negative_images_dir))}.jpg'),
+                    img=img[top_left_y:bottom_right_y,
+                            top_left_x:bottom_right_x]
                 )
 
     @staticmethod
-    def draw_rectangles(listOfPoints: list, img: str):
+    def draw_rectangles(list_of_points: list, img: str) -> image:
         """
         This method draws rectangles around marked objects.
 
-        listOfPoints: list that contains Point objects
+        list_of_points: list that contains Point objects
         img: copy of the image that you want to draw rectangles
         """
-
-        for iteration, _ in enumerate(listOfPoints):
+        for iteration, _ in enumerate(list_of_points):
             if (iteration % 2 == 1):
                 cv2.putText(
                     img=img,
                     text=str(int((iteration - 1)/2)),
                     org=(
-                        listOfPoints[iteration - 1].x - 15,
-                        listOfPoints[iteration - 1].y - 5),
+                        list_of_points[iteration - 1].x - 15,
+                        list_of_points[iteration - 1].y - 5),
                     fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                     fontScale=.5,
                     color=(0, 100, 255),
@@ -120,11 +120,11 @@ class DataProcessingMethods(Point):
                 image = cv2.rectangle(
                     img=img,
                     pt1=(
-                        listOfPoints[iteration - 1].x,
-                        listOfPoints[iteration - 1].y),
+                        list_of_points[iteration - 1].x,
+                        list_of_points[iteration - 1].y),
                     pt2=(
-                        listOfPoints[iteration].x,
-                        listOfPoints[iteration].y),
+                        list_of_points[iteration].x,
+                        list_of_points[iteration].y),
                     color=(0, 50, 255),
                     thickness=1
                 )
@@ -132,14 +132,11 @@ class DataProcessingMethods(Point):
         return image
 
     @staticmethod
-    def remove_point(img: str, listOfPoints: list):
+    def draw_points(img: str, list_of_points: list) -> image:
         """
 
         """
-
-        listOfPoints.pop()
-
-        for point in listOfPoints:
+        for point in list_of_points:
             cv2.circle(
                 img=img,
                 center=(point.x, point.y),
@@ -148,10 +145,10 @@ class DataProcessingMethods(Point):
                 thickness=-1
             )
 
-        return img, listOfPoints
+        return img
 
 
-def get_position(event, x, y, flags, param):
+def get_position(event, x: int, y: int, flags: list, param: list) -> None:
     """
     Function get_position does a few things. When you double click left  
     mouse button function will  

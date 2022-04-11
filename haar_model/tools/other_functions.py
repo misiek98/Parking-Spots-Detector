@@ -1,7 +1,7 @@
 import json
 
 
-def load_config(path):
+def load_config(path: str) -> dict:
     """
 
     """
