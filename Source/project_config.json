@@ -1,6 +1,6 @@
 {
     "video": "C:\\Users\\Misiek\\Desktop\\Untitled.mp4",
-    "cascadeXML": "C:\\Users\\Misiek\\Desktop\\kekkek\\Parking-Spots-Detector\\haar_model\\results\\cascade.xml",
+    "cascadeXML": "C:\\Users\\Misiek\\Desktop\\Python\\MGR\\Source\\haar_model\\results\\cascade.xml",
     "yoloWeights": "C:\\Users\\Misiek\\Desktop\\Python\\MGR\\yolov3_files\\yolov3.weights",
     "yoloNames": "C:\\Users\\Misiek\\Desktop\\Python\\MGR\\yolov3_files\\coco.names",
     "yoloCfg": "C:\\Users\\Misiek\\Desktop\\Python\\MGR\\yolov3_files\\yolov3.cfg",

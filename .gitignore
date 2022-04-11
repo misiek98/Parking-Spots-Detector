@@ -1,6 +1,5 @@
 .vscode
-/haar_model/__pycache__
-/haar_model/tools/__pycache__
+/Source/haar_model/__pycache__
+/Source/haar_model/tools/__pycache__
 yolov3_files
 wybrane_photo
-testfile.py

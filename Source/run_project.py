@@ -5,7 +5,7 @@ from haar_model.tools.data_processing import DataProcessingMethods, Point, get_p
 from haar_model.tools.other_functions import load_config
 
 config = load_config(
-    r'C:\Users\Misiek\Desktop\Python\MGR\project_config.json'
+    r'C:\Users\Misiek\Desktop\Python\MGR\Source\project_config.json'
 )
 
 with open(config['yoloNames']) as f:
