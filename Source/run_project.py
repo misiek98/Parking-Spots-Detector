@@ -100,7 +100,8 @@ while True:
             if (cv2.waitKey(1) == ord('r')):
                 img = frame.copy()
 
-                list_of_points.pop()
+                if (len(list_of_points) > 0):
+                    list_of_points.pop()
 
                 if (len(list_of_points) % 2 != 0):
                     DataProcessingMethods.draw_rectangles(
@@ -249,6 +250,17 @@ while True:
                         number_of_cars += 1
                         break
 
+                # Draw the parking areas
+                # for e in list_of_parking_areas:
+                #     cv2.drawContours(
+                #         image=frame,
+                #         contours=[e],
+                #         contourIdx=-1,
+                #         color=(0, 255, 0),
+                #         thickness=-1
+                #     )
+
+                # Mark each detected object
                 # colour_box_current = colours[classIDs[i]].tolist()
                 # cv2.rectangle(
                 #     img=frame,

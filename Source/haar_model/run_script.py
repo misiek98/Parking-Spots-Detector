@@ -10,14 +10,14 @@ config = load_config(
     r'C:\Users\Misiek\Desktop\Python\MGR\Source\haar_model\haar_config.json')
 
 list_of_points = []
-image_set = config['data']
+IMAGE_SET = config['data']
 # path_to_info_file contains points required to train haar_model
-path_to_info_file = config['parkingLinesInfoFile']
-pos_image_path = config['posDir']
+PATH_TO_INFO_FILE = config['parkingLinesInfoFile']
+POS_IMAGE_PATH = config['posDir']
 
-for image in os.listdir(image_set):
+for image in os.listdir(IMAGE_SET):
     image_path = os.path.join(
-        image_set,
+        IMAGE_SET,
         image
     )
     img = cv2.imread(image_path)
@@ -45,20 +45,20 @@ for image in os.listdir(image_set):
                     list_of_points=list_of_points
                 )
 
-                with open(path_to_info_file, 'a') as file:
+                with open(PATH_TO_INFO_FILE, 'a') as file:
                     file.write(
-                        f'{pos_image_path} {int(len(list_of_points) / 2)} ')
+                        f'{POS_IMAGE_PATH} {int(len(list_of_points) / 2)} ')
                     for coordinate in list_of_points:
                         file.write(f'{coordinate.x} {coordinate.y} ')
                     file.write('\n')
 
                 list_of_points.clear()
-                print(f'File was saved: {path_to_info_file}')
+                print(f'File was saved: {PATH_TO_INFO_FILE}')
 
                 shutil.copyfile(
                     src=image_path,
                     dst=os.path.join(
-                        pos_image_path,
+                        POS_IMAGE_PATH,
                         image
                     )
                 )
@@ -110,7 +110,8 @@ for image in os.listdir(image_set):
         if (cv2.waitKey(1) == ord('r')):
             img = cv2.imread(image_path)
 
-            list_of_points.pop()
+            if (len(list_of_points) > 0):
+                list_of_points.pop()
             DataProcessingMethods.draw_points(
                 img=img,
                 list_of_points=list_of_points

@@ -1,7 +1,7 @@
-from email.mime import image
 import os
 
 import cv2
+import numpy
 
 from .other_functions import load_config
 
@@ -13,8 +13,8 @@ class Point:
     """ 
     Class Point contains X and Y coordinates.
 
-    x: x coordinate
-    y: y coordinate
+    x: x coordinate.
+    y: y coordinate.
     """
 
     def __init__(self, x: int, y: int):
@@ -42,10 +42,10 @@ class DataProcessingMethods(Point):
         This method prepares data from listOfPoints to generate a .vec file that will  
         be used to train a Haar Cascade model.
 
-        listOfPoints: list that contains Point objects
+        listOfPoints: list that contains Point objects.
 
 
-        The list should consists of an even number of points (if not,  there is an error).  
+        The list should consists of an even number of points (if not, there is an error).  
         The iteration starts from the second element of the list. 
         To create an area, you need 2 points - an initial point with the smallest x and y coordinates  
         (top left corner), and the width and height of that area. The width and height of the area are  
@@ -58,22 +58,23 @@ class DataProcessingMethods(Point):
                                     - list_of_points[iteration - 1])
 
                 if (list_of_points[iteration - 1].x > list_of_points[iteration].x):
-                    list_of_points[iteration -
-                                   1].x = list_of_points[iteration].x
+                    list_of_points[iteration
+                                   - 1].x = list_of_points[iteration].x
                 if (list_of_points[iteration - 1].y > list_of_points[iteration].y):
-                    list_of_points[iteration -
-                                   1].y = list_of_points[iteration].y
+                    list_of_points[iteration
+                                   - 1].y = list_of_points[iteration].y
 
                 list_of_points[iteration] = width_and_height
 
     @staticmethod
-    def save_marked_area(list_of_points: list, img: str) -> None:
+    def save_marked_area(list_of_points: list, img: numpy.ndarray) -> None:
         """
         This method cuts out the marked part(s) of the image and save it to neg folder.
 
-        listOfPoints: list that contains Point objects
-        img: copy of the image
+        listOfPoints: list that contains Point objects.
+        img: copy of the image.
         """
+        NEGATIVE_IMAGES_DIR = config['negDir']
         for iteration, _ in enumerate(list_of_points):
             if (iteration % 2 == 1):
                 top_left_x = min(list_of_points[iteration - 1].x,
@@ -85,23 +86,23 @@ class DataProcessingMethods(Point):
                 bottom_right_y = max(list_of_points[iteration - 1].y,
                                      list_of_points[iteration].y)
 
-                negative_images_dir = config['negDir']
+                # NEGATIVE_IMAGES_DIR = config['negDir']
 
                 cv2.imwrite(
                     filename=os.path.join(
-                        negative_images_dir,
-                        f'file{len(os.listdir(negative_images_dir))}.jpg'),
+                        NEGATIVE_IMAGES_DIR,
+                        f'file{len(os.listdir(NEGATIVE_IMAGES_DIR))}.jpg'),
                     img=img[top_left_y:bottom_right_y,
                             top_left_x:bottom_right_x]
                 )
 
     @staticmethod
-    def draw_rectangles(list_of_points: list, img: str) -> image:
+    def draw_rectangles(list_of_points: list, img: numpy.ndarray) -> numpy.ndarray:
         """
         This method draws rectangles around marked objects.
 
-        list_of_points: list that contains Point objects
-        img: copy of the image that you want to draw rectangles
+        list_of_points: list that contains Point objects.
+        img: copy of the image that you want to draw rectangles.
         """
         for iteration, _ in enumerate(list_of_points):
             if (iteration % 2 == 1):
@@ -132,9 +133,12 @@ class DataProcessingMethods(Point):
         return image
 
     @staticmethod
-    def draw_points(img: str, list_of_points: list) -> image:
+    def draw_points(img: numpy.ndarray, list_of_points: list) -> numpy.ndarray:
         """
+        Function draw_points draws a marked points from list_of_points on the image.
 
+        img: copy of the image.
+        list_of_points: list that contains Point objects.
         """
         for point in list_of_points:
             cv2.circle(
