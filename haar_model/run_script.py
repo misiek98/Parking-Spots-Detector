@@ -85,7 +85,7 @@ for image in os.listdir(IMAGE_SET):
                 break
 
             except AssertionError:
-                print("Insufficient number of points, images wasn't saved")
+                print("Insufficient number of points, image wasn't saved")
                 list_of_points.clear()
                 break
 
