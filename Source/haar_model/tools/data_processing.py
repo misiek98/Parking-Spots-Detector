@@ -6,7 +6,7 @@ import numpy
 from .other_functions import load_config
 
 config = load_config(
-    r'C:\Users\Misiek\Desktop\Python\MGR\haar_model\haar_config.json')
+    r'C:\Users\Misiek\Desktop\Python\MGR\Source\haar_model\haar_config.json')
 
 
 class Point:
