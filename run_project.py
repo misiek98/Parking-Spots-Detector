@@ -138,7 +138,7 @@ while True:
 
                 img = frame.copy()
 
-                user_input = input("Choose a rectangle(s) to mark parking"
+                user_input = input("Choose a rectangle(s) to mark parking "
                                    "area(s). Separate each ID with spaces: ")
                 user_input = [int(number) for number in user_input.split()]
 
@@ -215,6 +215,11 @@ while True:
                     box_current = detected_objects[0:4] * \
                         np.array([w, h, w, h])
 
+                    # The YOLO vector contains the center of the object.
+                    # However, the application allows objects to be
+                    # determined (uncomment lines 273 - 293), so I
+                    # decided to recalculate the rectangle coordinates
+                    # anyway.
                     x_center, y_center, box_width, box_height = box_current
                     x_min = int(x_center - box_width//2)
                     y_min = int(y_center - box_height//2)
