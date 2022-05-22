@@ -130,8 +130,7 @@ while True:
                     img=img
                 )
 
-            # Press "n" to mark parking areas.
-            # As an input take an extreme rectangle(s).
+            # Press "n" to automatically specify parking zones
             # After that, the program starts measuring the occupancy
             # of parking spaces
             if (cv2.waitKey(1) == ord('n')):
