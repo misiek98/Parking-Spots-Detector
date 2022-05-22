@@ -1,3 +1,5 @@
+from itertools import chain
+
 import cv2
 import numpy as np
 
@@ -133,46 +135,93 @@ while True:
             # After that, the program starts measuring the occupancy
             # of parking spaces
             if (cv2.waitKey(1) == ord('n')):
-                if (isinstance(list_of_parking_areas, np.ndarray)):
-                    list_of_parking_areas = []
-
-                img = frame.copy()
-
-                user_input = input("Choose a rectangle(s) to mark parking "
-                                   "area(s). Separate each ID with spaces: ")
-                user_input = [int(number) for number in user_input.split()]
-
-                temp_list_that_contain_areas = []
-
-                for idx in user_input:
-                    temp_list_that_contain_areas.append(
-                        list_of_points[2 * idx]
+                # change from Point instances to NumPy array
+                DataProcessingMethods.prepare_vector_data(
+                    list_of_points=list_of_points
+                )
+                list_of_points = list(
+                    chain.from_iterable(
+                        (point.x, point.y)
+                        for point in list_of_points
                     )
-                    temp_list_that_contain_areas.append(
-                        list_of_points[2*idx + 1]
+                )
+                list_of_points = np.array(list_of_points).reshape(-1, 4)
+
+                # Calculating the angles of the upper left corners
+                # of rectangles
+                angles = []
+                for x, y, _, _ in list_of_points:
+                    angles.append(
+                        np.arctan((img.shape[0] - y) / x)
+                    )
+                angles = [int(np.degrees(angle)) for angle in angles]
+
+                # Sort the angles in descending order
+                rectangles_with_angles = []
+                for (x, y, w, h), angle in zip(list_of_points, angles):
+                    rectangles_with_angles.append((x, y, w, h, angle))
+
+                rectangles_with_angles = np.array(
+                    object=rectangles_with_angles,
+                    dtype=[
+                        ('x', int),
+                        ('y', int),
+                        ('w', int),
+                        ('h', int),
+                        ('angle', int)
+                    ]
+                )
+                rectangles_with_angles = np.sort(
+                    rectangles_with_angles,
+                    order='angle'
+                )
+                rectangles_with_angles = rectangles_with_angles[::-1]
+
+                # Automatic determination of parking zones
+                for x, y, w, h, _ in rectangles_with_angles:
+                    top_left = (x, y)
+                    top_right = (x + w, y)
+                    bottom_left = (x, y + h)
+                    bottom_right = (x + w, y + h)
+                    flag = True
+
+                    rectangle = np.array(
+                        (top_left, top_right, bottom_right, bottom_left)
                     )
 
-                for i, _ in enumerate(temp_list_that_contain_areas):
-                    if (i % 2 == 1):
-                        list_of_parking_areas.append(
-                            [max(temp_list_that_contain_areas[i - 1].x,
-                                 temp_list_that_contain_areas[i].x),
-                             min(temp_list_that_contain_areas[i - 1].y,
-                                 temp_list_that_contain_areas[i].y)]
-                        )
-                        list_of_parking_areas.append(
-                            [min(temp_list_that_contain_areas[i - 1].x,
-                                 temp_list_that_contain_areas[i].x),
-                             max(temp_list_that_contain_areas[i - 1].y,
-                                 temp_list_that_contain_areas[i].y)]
-                        )
+                    if (len(list_of_parking_areas) == 0):
+                        list_of_parking_areas.append([rectangle])
 
-                list_of_parking_areas = np.array(list_of_parking_areas)
-                list_of_parking_areas = list_of_parking_areas.reshape(-1, 4, 2)
+                    else:
+                        for area in list_of_parking_areas:
+                            is_in_parking_area = cv2.pointPolygonTest(
+                                contour=area[-1],
+                                pt=top_left,
+                                measureDist=False
+                            )
+                            if (is_in_parking_area == 1):
+                                area.append(rectangle)
+                                flag = False
+                                break
 
-                # To avoid marking an hourglass-shaped area
-                # we switch point position from bottom left
-                # corner to upper right corner.
+                        if flag:
+                            list_of_parking_areas.append([rectangle])
+
+                list_of_parking_areas = list(
+                    chain.from_iterable(
+                        (area[0], area[-1])
+                        for area in list_of_parking_areas
+                    )
+                )
+
+                list_of_parking_areas = list(
+                    chain.from_iterable(
+                        (element[3], element[1])
+                        for element in list_of_parking_areas
+                    )
+                )
+                list_of_parking_areas = np.array(
+                    list_of_parking_areas).reshape(-1, 4, 2)
                 for dim in list_of_parking_areas:
                     dim[[2, 3]] = dim[[3, 2]]
 
