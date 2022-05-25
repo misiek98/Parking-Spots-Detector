@@ -24,9 +24,7 @@ The image above shows the result of a random parameterization of the Haar algori
 - *w*: remove selected rectangles,
 - *r*: remove last marked point,
 - *d*: draw missing rectangles (requires new marked points),
-- *n*: select the parking area and proceed to determining the parking occupancy.
-
-![4](https://user-images.githubusercontent.com/76869717/167130841-6268915f-68c1-4993-974c-0642aa03e935.png)
+- *n*: automatically specifying parking zones and proceed to determining the parking occupancy.
 
 The corrected result is shown in the following figure:
 
@@ -46,7 +44,6 @@ When all zones were defined, the YOLOv3 algorithm detects only cars. After that 
 # Possible improvements
 
 - Increase the number of training samples for the detection of parking lines,
-- automatic definition of parking zones,
 - implement a GUI instead of keyboard shortcuts.
 
 
